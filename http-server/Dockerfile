@@ -17,3 +17,4 @@ RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 FROM scratch
 COPY --from=builder /go/test/main /
 CMD ["/main"]
+EXPOSE 80
