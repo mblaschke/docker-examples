@@ -14,4 +14,4 @@ Docker examples
 
 Example: ``make hello-world``
 
-`http-server`, `php` and `go-func` are available on docker host port 8000
+`http-server`, `php` and `go-func` are available on docker host port 8000 (container port is 80)
