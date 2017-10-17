@@ -7,7 +7,7 @@ set -o errexit   ## set -e : exit the script if any statement returns a non-true
 
 EXAMPLE="$1"
 DOCKER_OPTS=""
-DOCKER_IMAGE="mblaschke/docker-example:$EXAMPLE"
+DOCKER_IMAGE="mblaschke/docker-examples:$EXAMPLE"
 
 if [[ ! -d "${EXAMPLE}" ]]; then
     echo "[ERROR] Example not defined"
@@ -16,7 +16,7 @@ fi
 
 case "$EXAMPLE" in
 	"http-server")
-		DOCKER_OPTS="-p 8000:8000"
+		DOCKER_OPTS="-p 8000:80"
 		;;
 
 	"php")
@@ -24,7 +24,7 @@ case "$EXAMPLE" in
 		;;
 
 	"go-func")
-	    docker build -t "mblaschke/docker-example:go-func-runner" go-func/go-funcrunner-base
+	    docker build -t "mblaschke/docker-examples:go-func-runner" go-func/go-funcrunner-base
 		DOCKER_OPTS="-p 8000:8000"
 		;;
 esac

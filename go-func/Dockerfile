@@ -1,5 +1,5 @@
 #############################
 # Final image
 #############################
-FROM mblaschke/docker-example:go-func-runner
+FROM mblaschke/docker-examples:go-func-runner
 COPY func.go /app
