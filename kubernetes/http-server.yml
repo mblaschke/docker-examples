@@ -1,0 +1,70 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: http-server
+  namespace: mblaschke
+spec:
+  type: LoadBalancer
+  selector:
+    app: http-server
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http
+  sessionAffinity: None
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: http-server
+  namespace: mblaschke
+  labels:
+    app: http-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: http-server
+  template:
+    metadata:
+      labels:
+        app: http-server
+        deployment-tag: "1"
+    spec:
+      containers:
+      - name: http-server
+        image: mblaschke/docker-examples:http-server
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            memory: 1Gi
+            cpu: 500m
+          requests:
+            memory: 200Mi
+            cpu: 200m
+        livenessProbe: &livenessProbe
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          <<: *livenessProbe
+          failureThreshold: 20
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: http-server
+  namespace: mblaschke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: http-server
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50

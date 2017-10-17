@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: toolbox
+  namespace: mblaschke
+  labels:
+    name: toolbox
+spec:
+  containers:
+  - name: toolbox
+    image: ubuntu
+    command: ["tail", "-f", "/dev/null"]

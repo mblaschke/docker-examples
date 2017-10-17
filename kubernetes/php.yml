@@ -1,0 +1,69 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: php
+  namespace: mblaschke
+spec:
+  type: LoadBalancer
+  selector:
+    app: php
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: http
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: php
+  namespace: mblaschke
+  labels:
+    app: php
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: php
+  template:
+    metadata:
+      labels:
+        app: php
+        deployment-tag: "1"
+    spec:
+      containers:
+      - name: php
+        image: mblaschke/docker-examples:php
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+        resources:
+          limits:
+            cpu: 500m
+            memory: 200Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        livenessProbe: &livenessProbe
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          <<: *livenessProbe
+          failureThreshold: 20
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: php
+  namespace: mblaschke
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: php
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
