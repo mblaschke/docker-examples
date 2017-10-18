@@ -16,4 +16,5 @@ RUN composer install
 FROM webdevops/php-apache:ubuntu-16.04
 COPY --from=builder /app /app
 RUN chown -R 1000:1000 /app
+RUN echo
 ENV WEB_DOCUMENT_ROOT=/app/web/
