@@ -5,12 +5,13 @@ Docker examples
 
 **Note:** These examples may use multi stage docker build for easy building of applications.
 
-| Example       | Description                                                 |
-|:--------------|:------------------------------------------------------------|
-| `hello-world` | Single file docker container as "Hello World!" example      |
-| `http-server` | Single file docker container with HTTP server               |
-| `php`         | PHP application inside a docker container (with auto build) |
-| `go-func`     | Function call api docker container                          |
+| Example                  | Description                                                                                    |
+|:-------------------------|:-----------------------------------------------------------------------------------------------|
+| `hello-world`            | Single file docker container as "Hello World!" example                                         |
+| `hello-world-multistage` | Single file docker container as "Hello World!" example (multi stage build, binary only image)  |
+| `http-server`            | Single file docker container with HTTP server                                                  |
+| `php`                    | PHP application inside a docker container (with auto build)                                    |
+| `go-func`                | Function call api docker container                                                             |
 
 Example: ``make hello-world``
 
